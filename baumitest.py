@@ -1,5 +1,5 @@
 path = "A:/SteamLibrary/steamapps/common/Dark Souls Prepare to Die Edition/"
-path = "C:/Program Files (x86)/Steam/steamapps/common/Dark Souls Prepare to Die Edition/"
+#path = "C:/Program Files (x86)/Steam/steamapps/common/Dark Souls Prepare to Die Edition/"
 
 import cv2
 import numpy as np
@@ -122,7 +122,6 @@ names = []
 try:
         f = open("installed.txt", 'r')
         f = f.readlines()
-        print(f)
         for r in range(len(f)):
                 print(r)
                 if(r % 2):
