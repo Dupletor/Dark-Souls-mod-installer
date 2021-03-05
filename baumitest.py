@@ -17,22 +17,23 @@ cropping = False
 buttons = []
 names = []
 
-def extract(p, head, location):
-        if os.path.isdir(location + p):
-                files = os.listdir(location + p)
-                for file in files:
-                        if not os.path.isfile(file):
-                                if((location + p)[-1] != '/'):
-                                        extract(file, head, location + p + '/')
-                                else:
-                                        extract(file, head, location + p)
-                                #print(location + p)
-                                try:
-                                        shutil.copytree(location + p, head + p)
-                                except:
-                                        continue
-        else:
-                shutil.copy(location + p, head)
+def extract(p, head, location, depth):
+        if depth <= 3:
+                if os.path.isdir(location + p):
+                        files = os.listdir(location + p)
+                        for file in files:
+                                if not os.path.isfile(file):
+                                        if((location + p)[-1] != '/'):
+                                                extract(file, head, location + p + '/', depth+1)
+                                        else:
+                                                extract(file, head, location + p, depth+1)                                        #try:
+                                        if(not os.path.exists(head + p)):                                                #if(depth != 0):
+                                                shutil.copytree(location + p, head + p, depth+1)
+                                        #except:
+                                                #        print(location + p)
+                                        #        continue
+                else:
+                        shutil.copy(location + p, head)
         
 
 def click(event, x, y, flags, param):
@@ -48,7 +49,7 @@ def click(event, x, y, flags, param):
                                 zip_ref = zipfile.ZipFile("mods/" + names[button], 'r')
                                 zip_names = []
                                 
-                                #print(zip_ref.namelist())
+                                print(zip_ref.namelist())
                                 
                                 for name in zip_ref.namelist():
                                         if not name.endswith('/'):
@@ -76,7 +77,7 @@ def click(event, x, y, flags, param):
                                                                 copyfileobj(zip_ref.open(file), target)
                                                                 target.close()
                                         zip_ref.extractall(path + "DATA/")
-                                        extract(zip_ref.namelist()[0], path + "DATA/", path + "DATA/")
+                                        extract(zip_ref.namelist()[0], path + "DATA/", path + "DATA/", 0)
                                         #for file in zip_ref.namelist():
                                         #        for name in zip_names:
                                         #                if name in file:
@@ -84,7 +85,8 @@ def click(event, x, y, flags, param):
                                 else:
                                         #print(zip_ref.namelist())
                                         for file in (os.listdir(path + "DATA/")):
-                                                print(file)
+                                                #print(file)
+                                                
                                                 for name in zip_ref.namelist():
                                                         if(file in name):
                                                                 try:
@@ -99,6 +101,7 @@ def click(event, x, y, flags, param):
                                         for file in files_to_backup:
                                                 copyfile(path + "backup/" + file, path + "DATA/" + file)
                                                 os.remove(path + "backup/" + file)
+                                        
                 
                                         
 	# check to see if the left mouse button was released
