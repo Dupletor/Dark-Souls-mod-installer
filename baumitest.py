@@ -119,9 +119,28 @@ lineType               = 2
 
 buttons = []
 names = []
+try:
+        f = open("installed.txt", 'r')
+        f = f.readlines()
+        print(f)
+        for r in range(len(f)):
+                print(r)
+                if(r % 2):
+                        buttons.append(f[r][:-1] in 'True')
+                else:
+                        names.append((f[r][:-1]))
+        f.close()
+except:
+        pass
+
 while(True):
         files = os.listdir("mods")
         img = np.ones([50*len(files), 500, 3],dtype=np.uint8)*255
+        f = open("installed.txt", 'w')
+        for i in range(len(buttons)):
+                f.write(names[i] + '\n')
+                f.write(str(buttons[i]) + '\n')
+        f.close()
 
         for file in range(len(files)):
                 if(not files[file] in names):
